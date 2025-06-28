@@ -3,4 +3,6 @@ __pycache__/
 *.olean
 /build/
 venv/
-data/
+data/raw/BB5_verified_enumeration.csv
+data/train/train.csv
+data/test/test.csv
