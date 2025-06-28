@@ -1,0 +1,10 @@
+Test set evaluation:
+  Accuracy : 0.267026
+  Precision: 0.266659
+  Recall   : 0.998910
+  F1 score : 0.420946
+  Confusion matrix (rows=true, cols=pred):
+    [22015, 26582221]
+    [10545, 9665863]
+
+Support: {'halt': 9676408, 'nonhalt': 26604236}

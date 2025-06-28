@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.olean
+/build/
+venv/
+data/
