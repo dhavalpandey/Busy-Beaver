@@ -16,4 +16,4 @@ def evaluate(n: int) -> int:
     # each machine has n * len(CELLS) instruction slots
     return total_choices ** (n * len(CELLS))
 
-print(evaluate(3))
+print(evaluate(1))

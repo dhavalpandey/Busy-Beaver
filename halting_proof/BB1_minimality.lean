@@ -1,6 +1,4 @@
--- Proof that BB(1) = 1
-
--- ## 1. Defining the Turing Machine Model
+-- ## 1. Model Definition
 inductive Symbol | S0 | S1
   deriving Repr, DecidableEq
 
@@ -17,10 +15,10 @@ structure Tape where
 
 def Tape.blank : Tape := { left := [], head := .S0, right := [] }
 
--- A Machine's program maps a state and symbol to a (State, Symbol, MoveDir) triple.
 def Machine := State → Symbol → (State × Symbol × MoveDir)
 
--- ## 2. The Simulator
+
+-- ## 2. Simulator
 def step (m : Machine) (s : State) (t : Tape) : (State × Tape) :=
   if s == .HALT then (s, t) else
     let (s', write, move) := m s t.head
@@ -32,7 +30,6 @@ def step (m : Machine) (s : State) (t : Tape) : (State × Tape) :=
       | .L, [], r    => { left := [], head := .S0, right := write :: r }
     (s', t')
 
--- Runs a machine from a blank tape until it halts or a step limit is reached.
 def run (m : Machine) (max_steps : Nat) : Option Tape :=
   let rec loop : Nat → State → Tape → Option Tape
     | 0, _, _ => none
@@ -42,18 +39,19 @@ def run (m : Machine) (max_steps : Nat) : Option Tape :=
         loop n s' t'
   loop max_steps .A .blank
 
--- ## 3. The Champion Machine and its Proof
+
+-- ## 3. Champion Machine and Proof
 def bb1_champion : Machine
-| .A, .S0 => (.HALT, .S1, .R) -- On a blank square, write S1 and HALT.
-| .A, .S1 => (.HALT, .S1, .L) -- Unreachable in a standard run.
-| .HALT, _ => (.HALT, .S0, .R) -- Required for totality, also unreachable.
+| .A, .S0 => (.HALT, .S1, .R)
+| .A, .S1 => (.HALT, .S1, .L)
+| .HALT, _ => (.HALT, .S0, .R)
 
 def count_ones (tape : Tape) : Nat :=
   (tape.left.filter (· == .S1)).length +
   (if tape.head == .S1 then 1 else 0) +
   (tape.right.filter (· == .S1)).length
 
--- The Main Theorem: The champion halts and its score is 1.
+-- Theorem: The champion halts with a score of 1.
 theorem champion_score_is_1 :
   let final_tape := { left := [.S1], head := .S0, right := [] }
   run bb1_champion 2 = some final_tape ∧ count_ones final_tape = 1 :=
@@ -62,5 +60,6 @@ by
   · rfl
   · rfl
 
--- ## 4. The Final Answer
-def BusyBeaver1 : Nat := 1
+-- ## 4. Conclusion
+-- This file formally proves that BB(1) ≥ 1.
+def BusyBeaver1_Lower_Bound : Nat := 1
