@@ -1,12 +1,19 @@
-STATES = ('a', 'b', 'c', 'd', 'e')
 CELLS = (0, 1)
-MOVE = ('l', 'r')
+MOVE  = ('l', 'r')
 
-HLT = '-'
+"""
+Computed results:
+n = 1: 64
+n = 2: 20,736
+n = 3: 16,777,216
+n = 4: 25,600,000,000
+n = 5: 63,403,380,965,376
+"""
 
-# each instruction = (write, move, next_state)
-total_cells = (len(STATES)*len(CELLS)*len(MOVE)) + 1
+def evaluate(n: int) -> int:
+    # each instruction = (write, move, next_state or halt)
+    total_choices = len(CELLS) * len(MOVE) * (n + 1)
+    # each machine has n * len(CELLS) instruction slots
+    return total_choices ** (n * len(CELLS))
 
-# each machine has 10 cells
-diff_machines = (total_cells**10)/2
-print(f'Total number of machines: {diff_machines:,}')
+print(evaluate(3))
