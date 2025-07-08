@@ -1,4 +1,6 @@
 -- Proof that BB(1) = 1
+
+-- ## 1. Defining the Turing Machine Model
 inductive Symbol | S0 | S1
   deriving Repr, DecidableEq
 
@@ -18,7 +20,7 @@ def Tape.blank : Tape := { left := [], head := .S0, right := [] }
 -- A Machine's program maps a state and symbol to a (State, Symbol, MoveDir) triple.
 def Machine := State → Symbol → (State × Symbol × MoveDir)
 
--- Executes a single step of a given machine.
+-- ## 2. The Simulator
 def step (m : Machine) (s : State) (t : Tape) : (State × Tape) :=
   if s == .HALT then (s, t) else
     let (s', write, move) := m s t.head
@@ -40,7 +42,7 @@ def run (m : Machine) (max_steps : Nat) : Option Tape :=
         loop n s' t'
   loop max_steps .A .blank
 
-
+-- ## 3. The Champion Machine and its Proof
 def bb1_champion : Machine
 | .A, .S0 => (.HALT, .S1, .R) -- On a blank square, write S1 and HALT.
 | .A, .S1 => (.HALT, .S1, .L) -- Unreachable in a standard run.
@@ -60,4 +62,5 @@ by
   · rfl
   · rfl
 
+-- ## 4. The Final Answer
 def BusyBeaver1 : Nat := 1
